@@ -1,3 +1,7 @@
 # PUC
-Pop-Up Card | 会弹出的卡片，对就是那个可以折叠的生日卡片哦！
-Portable Universal Context | 便携式上下文。
+
+README.md
+
+[PUC注释增强规范(v3.0.1).ini](./PUC注释增强规范(v3.0.1).ini)
+
+[PUC文件集规范 (v3.0).ini](./PUC文件集规范 (v3.0).ini)
