@@ -1,6 +1,6 @@
 ﻿# ============================================
 # PUC路径自动配置脚本 (PowerShell v2 原生版)
-# 版本: v3.0.0 - 使用StreamReader/Writer精准行替换
+# 版本: v3.0.1 - 修正：路径使用反斜杠
 # 存放: <仓库根目录>\.pucsetting\setpath.ps1
 # ============================================
 
@@ -23,9 +23,9 @@ if (-not (Test-Path $iniFile)) {
     exit 1
 }
 
-# 3. 准备路径信息
-$newPath = $pucDir -replace "\\", "/" # 将Windows路径分隔符转为正斜杠，以统一格式
-$tempFile = $iniFile + ".tmp" # 临时文件路径，用于安全写入
+# 3. 准备路径信息 - 直接使用原生 Windows 路径 (反斜杠)
+$newPath = $pucDir
+$tempFile = $iniFile + ".tmp"
 
 try {
     # 4. 使用StreamReader读取，StreamWriter写入临时文件
@@ -36,22 +36,19 @@ try {
     while ($line -ne $null) {
         # 5. 精准定位：如果行以目标键名开头，则替换整行内容
         if ($line.StartsWith("GitHub_LocalPath:")) {
-            # 重组目标行，保留键名，替换为新路径，并附加统一的注释后缀
             $newLine = "GitHub_LocalPath:" + $newPath + " | git clone后的本地仓库根目录(Win用反斜杠\ Unix用正斜杠/) | 更换设备时首先修改此项"
             $writer.WriteLine($newLine)
         } else {
-            # 其他行原封不动地写入临时文件
             $writer.WriteLine($line)
         }
         $line = $reader.ReadLine()
     }
 } finally {
-    # 确保无论发生什么，文件句柄都会被关闭
     if ($reader -ne $null) { $reader.Close() }
     if ($writer -ne $null) { $writer.Close() }
 }
 
-# 6. 安全替换：用编辑好的临时文件替换原始文件
+# 6. 用编辑好的临时文件替换原始文件
 Copy-Item $tempFile $iniFile -Force
 Remove-Item $tempFile -Force
 
