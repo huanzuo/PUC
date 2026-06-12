@@ -1,9 +1,9 @@
-﻿@'
 # ============================================
 # PUC路径自动配置脚本 (PowerShell v2 原生版)
-# 版本: v4.2.1 - 完全移除命名参数，仅使用位置参数
-# 用法: .\setpath-files.ps1 [目标文件名]
-# 示例: .\setpath-files.ps1 00_README.puc.ini
+# 版本: v4.2.2 - 手动创建，UTF-8 编码
+# 存放: <仓库根目录>\.pucsetting\setpath.ps1
+# 用法: .\setpath.ps1 <目标文件名>
+# 示例: .\setpath.ps1 00_README.puc.ini
 # ============================================
 
 $File = if ($args.Count -gt 0) { $args[0] } else { $null }
@@ -13,12 +13,12 @@ if ($File -eq $null -or $File.Trim() -eq "") {
     Write-Output "PUC本地路径自动配置脚本"
     Write-Output "========================="
     Write-Output ""
-    Write-Output "用途：更新 .puc.ini 文件中的 GitHub_LocalPath:本地仓库路径"
+    Write-Output "用途：更新 .puc.ini 文件中的 GitHub_LocalPath"
     Write-Output ""
-    Write-Output "用法：.\setpath-files.ps1 [目标文件名]"
+    Write-Output "用法：.\setpath.ps1 <目标文件名>"
     Write-Output ""
-    Write-Output "范例：.\setpath-files.ps1 00_README.puc.ini"
-    Write-Output "      .\setpath-files.ps1 06_PUC-AI载入文档规范.puc.ini"
+    Write-Output "示例：.\setpath.ps1 00_README.puc.ini"
+    Write-Output "      .\setpath.ps1 06_PUC-AI载入文档规范.puc.ini"
     Write-Output ""
     exit 0
 }
@@ -72,4 +72,3 @@ Copy-Item $tempFile $iniFile -Force
 Remove-Item $tempFile -Force
 
 Write-Output "[完成] 已更新: $newPath"
-'@ | Set-Content .pucsetting\setpath-files.ps1
