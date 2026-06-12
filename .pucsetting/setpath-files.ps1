@@ -1,17 +1,16 @@
 ﻿# ============================================
 # PUC路径自动配置脚本 (PowerShell v2 原生版)
-# 版本: v4.1.1 - 修复语法错误 (end → })
+# 版本: v4.1.2 - 修复: -File 参数缺失值时显示帮助
 # 存放: <仓库根目录>\.pucsetting\setpath.ps1
-# 用法: .\setpath.ps1 -File <目标文件名>
-#       无参数时显示帮助
+# 用法: .\setpath.ps1 [-File <目标文件名>]
 # ============================================
 
 param(
     [string]$File
 )
 
-# ===== 无参数时显示帮助信息 =====
-if (-not $File) {
+# ===== 检查 -File 参数：未提供或值为空时显示帮助 =====
+if ($File -eq $null -or $File.Trim() -eq "") {
     Write-Output ""
     Write-Output "PUC本地路径自动配置脚本"
     Write-Output "========================="
