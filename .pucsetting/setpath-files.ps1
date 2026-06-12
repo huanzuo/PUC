@@ -1,8 +1,9 @@
 ﻿# ============================================
 # PUC路径自动配置脚本 (PowerShell v2 原生版)
-# 版本: v4.1.0 - 无参数时显示帮助；支持参数指定目标文件
+# 版本: v4.1.1 - 修复语法错误 (end → })
 # 存放: <仓库根目录>\.pucsetting\setpath.ps1
 # 用法: .\setpath.ps1 -File <目标文件名>
+#       无参数时显示帮助
 # ============================================
 
 param(
@@ -28,7 +29,7 @@ if (-not $File) {
     Write-Output "      若未找到 PUC 子目录则直接使用根目录。"
     Write-Output ""
     exit 0
-end
+}
 
 # 1. 获取本脚本所在目录 (.pucsetting) 并推导仓库根目录
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -48,13 +49,13 @@ if (-not (Test-Path $iniFile)) {
     Write-Error "请确保本脚本放在 <仓库根目录>\.pucsetting\setpath.ps1"
     Write-Error "并指定正确的目标文件名（例如 00_README.puc.ini）"
     exit 1
-end
+}
 
 # 3. 准备路径信息 (保持 Windows 反斜杠路径)
 $newPath = $pucDir
 $tempFile = $iniFile + ".tmp"
 
-try:
+try {
     # 4. 使用 StreamReader 和 StreamWriter 进行精准行替换
     $reader = [System.IO.StreamReader] $iniFile
     $writer = [System.IO.StreamWriter] $tempFile
@@ -81,7 +82,7 @@ try:
 } finally {
     if ($reader -ne $null) { $reader.Close() }
     if ($writer -ne $null) { $writer.Close() }
-end
+}
 
 # 7. 用编辑好的临时文件替换原始文件
 Copy-Item $tempFile $iniFile -Force
