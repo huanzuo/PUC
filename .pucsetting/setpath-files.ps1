@@ -1,8 +1,9 @@
-﻿# ============================================
+﻿@'
+# ============================================
 # PUC路径自动配置脚本 (PowerShell v2 原生版)
-# 版本: v4.2.0 - 位置参数，无命名参数
-# 存放: <仓库根目录>\.pucsetting\setpath-files.ps1
+# 版本: v4.2.1 - 完全移除命名参数，仅使用位置参数
 # 用法: .\setpath-files.ps1 [目标文件名]
+# 示例: .\setpath-files.ps1 00_README.puc.ini
 # ============================================
 
 $File = if ($args.Count -gt 0) { $args[0] } else { $null }
@@ -12,17 +13,12 @@ if ($File -eq $null -or $File.Trim() -eq "") {
     Write-Output "PUC本地路径自动配置脚本"
     Write-Output "========================="
     Write-Output ""
-    Write-Output "用途：自动检测当前仓库根目录，并将指定 .puc.ini 文件中的"
-    Write-Output "      GitHub_LocalPath:本地仓库路径 更新为真实的本地绝对路径。"
+    Write-Output "用途：更新 .puc.ini 文件中的 GitHub_LocalPath:本地仓库路径"
     Write-Output ""
     Write-Output "用法：.\setpath-files.ps1 [目标文件名]"
     Write-Output ""
     Write-Output "范例：.\setpath-files.ps1 00_README.puc.ini"
     Write-Output "      .\setpath-files.ps1 06_PUC-AI载入文档规范.puc.ini"
-    Write-Output ""
-    Write-Output "说明：本脚本应放置在 <仓库根目录>\.pucsetting\setpath-files.ps1"
-    Write-Output "      执行时会自动向上查找仓库根目录，并优先搜索其下的 PUC 子目录，"
-    Write-Output "      若未找到 PUC 子目录则直接使用根目录。"
     Write-Output ""
     exit 0
 }
@@ -39,9 +35,7 @@ if (Test-Path (Join-Path $pucDir $File)) {
 }
 
 if (-not (Test-Path $iniFile)) {
-    Write-Error "[错误] 找不到 PUC 配置文件: $iniFile"
-    Write-Error "请确保本脚本放在 <仓库根目录>\.pucsetting\setpath-files.ps1"
-    Write-Error "并指定正确的目标文件名（例如 00_README.puc.ini）"
+    Write-Error "[错误] 找不到文件: $iniFile"
     exit 1
 }
 
@@ -77,4 +71,5 @@ try {
 Copy-Item $tempFile $iniFile -Force
 Remove-Item $tempFile -Force
 
-Write-Output "[完成] 已将 $File 中的 GitHub_LocalPath:本地仓库路径 更新为: $newPath"
+Write-Output "[完成] 已更新: $newPath"
+'@ | Set-Content .pucsetting\setpath-files.ps1
