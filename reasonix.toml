@@ -1,0 +1,2 @@
+[permissions]
+allow = ["Bash(cd \"D:/Share/AI_Files/DOCs/github/PUC\" && pwsh -NoProfile -Command \"\n\\$bytes = [System.IO.File]::ReadAllBytes('09_PUC_AI_Session_Memory.puc.ini')\n\\$text = [System.Text.Encoding]::UTF8.GetString(\\$bytes)\n\\$found = \\$false\n\\$lines = \\$text -split \\\"`n\\\"\nfor (\\$i=0; \\$i -lt \\$lines.Count; \\$i++) {\n    if (\\$lines[\\$i] -match 'DELTA') {\n        Write-Host \\\"[\\$(\\$i+1)] \\$(\\$lines[\\$i].TrimEnd())\\\"\n        \\$found = \\$true\n    }\n}\nif (-not \\$found) { Write-Host 'No DELTA lines found' }\n\")"]
